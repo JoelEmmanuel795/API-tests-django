@@ -8,4 +8,6 @@ urlpatterns = [
     path('get-single-item/<int:id>', views.get_single_item, name='get-single-item'),
     path('get-taxed-items', views.get_taxed_items, name='get-taxed-items'),
     path('categories', views.get_categories, name='get-categories'),
+    path('menu-items2',views.MenuItemsViewSet.as_view({'get':'list'})),
+    path('menu-items2/<int:pk>',views.MenuItemsViewSet.as_view({'get':'retrieve'})),
 ]

@@ -16,6 +16,8 @@ from .serializers import MenuItemSerializer
 class MenuItemsViewSet(viewsets.ModelViewSet):
     queryset = MenuItem.objects.all()
     serializer_class = MenuItemSerializerTaxed
+    ordering_fields=['price','inventory']
+    search_fields=['title']
 
 class MenuItemView(generics.ListCreateAPIView):
     queryset = MenuItem.objects.all()

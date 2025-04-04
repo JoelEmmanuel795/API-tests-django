@@ -3,7 +3,7 @@ from .models import MenuItem
 from .serializers import MenuItemSerializer
 from .serializers import MenuItemSerializerLess
 from .serializers import MenuItemSerializerTaxed
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes, throttle_classes
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from django.core.paginator import Paginator, EmptyPage
@@ -11,6 +11,9 @@ from rest_framework.response import Response
 from rest_framework import viewsets
 from .models import MenuItem
 from .serializers import MenuItemSerializer  
+
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.throttling import AnonRateThrottle
 
 # Create your views here.
 class MenuItemsViewSet(viewsets.ModelViewSet):
@@ -85,3 +88,22 @@ def get_categories(request):
     categories = Category.objects.all()
     serializer = CategorySerializer(categories, many=True)
     return Response(serializer.data)
+
+@api_view()
+@permission_classes([IsAuthenticated])
+def secret(request):
+    return Response({"message": "This is a secret message!"})
+
+@api_view()
+@permission_classes([IsAuthenticated])
+def manager_view(request):
+    if request.user.groups.filter(name='Manager').exists():
+        return Response({"message": "Only Manager should see This"})
+    else:
+        return Response({"message": "You are not authorized to view this page."}, status=status.HTTP_403_FORBIDDEN)
+    
+@api_view()
+@throttle_classes([AnonRateThrottle])
+def throttle_check(request):
+    return Response({"message": "successful"})
+

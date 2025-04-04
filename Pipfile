@@ -9,6 +9,9 @@ djangorestframework = "*"
 django-debug-toolbar = "*"
 djangorestframework-xml = "*"
 bleach = "*"
+djoser = "*"
+djangorestframework-simplejwt = "~=5.2.1"
+setuptools = "*"
 
 [dev-packages]
 

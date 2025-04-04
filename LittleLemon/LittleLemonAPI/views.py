@@ -13,7 +13,8 @@ from .models import MenuItem
 from .serializers import MenuItemSerializer  
 
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.throttling import AnonRateThrottle
+from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
+from.throttles import TenCallsPerMinute
 
 # Create your views here.
 class MenuItemsViewSet(viewsets.ModelViewSet):
@@ -107,3 +108,8 @@ def manager_view(request):
 def throttle_check(request):
     return Response({"message": "successful"})
 
+@api_view()
+@permission_classes([IsAuthenticated])
+@throttle_classes([TenCallsPerMinute])
+def throttle_check_auth(request):
+    return Response({"message": "message for logged in users only"})
